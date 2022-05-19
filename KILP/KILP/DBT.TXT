@@ -1,0 +1,24 @@
+148
+
+170
+
+beneficiary_employee_id
+
+Beneficiary Middle Name
+
+Current Job Title skip for now
+
+work_address_zip work_address_country  not found anywhere
+beneficiary_middle_name
+i797_approved_date
+I-797 all
+maxout_note
+final_niv_maxout_date
+case_xref
+case_description
+case_withdrawn_date
+case_primary_attorney
+case_primary_case_manager
+
+gender not found casedata
+

@@ -1,0 +1,10 @@
+what you do in kilp
+
+1 read the beneficiary file and push to dbms
+2 read the case file and push to dbms
+3 from the pushed data from dbms
+you create following files in local
+    ActiveEmployeeReport
+    PermReport
+    WeeklyNetOps
+    
