@@ -1690,7 +1690,7 @@ def process_case_file(file_path, from_name):
     update dbo.Beneficiary
     set PrimaryBeneficiaryXref = BeneficiaryXref
     where BeneficiaryType = 'Primary' ''')
-
+    
     cursor.commit()
 
 def ActiveEmployeeReport(result_filepath):
