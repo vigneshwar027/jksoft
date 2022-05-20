@@ -93,7 +93,6 @@ def change_display_format(date):
 
 def start():
     truncate_full_db()
-    # quit()
     current_time = datetime.now() 
     month = str(current_time.month).rjust(2, '0')
     day = str(current_time.day).rjust(2, '0')
@@ -139,7 +138,7 @@ def process_beneficiary_file(file_path, from_name):
     enc= chardet.detect(rawdata)['encoding'] #UTF-16
     #print(rawdata)
     df = pd.read_csv(file_path, encoding='utf-8',delimiter=',')
-    # df.to_csv('outout.csv',index=False)
+    
     list_h = df.columns.tolist()
     #print(df.iterrows())
     total_rows = len(df)
@@ -195,7 +194,6 @@ def process_beneficiary_file(file_path, from_name):
         if "beneficiary_id" in list_h and not pd.isna(row["beneficiary_id"]):
             beneficiary_xref = str(row["beneficiary_id"]).strip()
 
-       
         beneficiary_type = ''
         if "beneficiary_type" in list_h and not pd.isna(row["beneficiary_type"]):
             beneficiary_type = str(row["beneficiary_type"]).strip()
@@ -212,8 +210,6 @@ def process_beneficiary_file(file_path, from_name):
                     length = len(results)
                     if length > 0:
                         petitioner_id = results[0][0]
-                        print(results[0])
-                        # quit()
                         is_primary_beneficiary = 0
 
 
@@ -785,11 +781,11 @@ def process_beneficiary_file(file_path, from_name):
 
             beneficiary_id = ''
             if beneficiary_xref:
-                results = cursor.execute("SELECT * FROM dbo.Beneficiary where BeneficiaryXref='{}' ".format(beneficiary_xref)).fetchall()
+                results = cursor.execute("SELECT * FROM dbo.Beneficiary where BeneficiaryXref='{}' and from_name='{}'".format(beneficiary_xref, from_name)).fetchall()
                 length = len(results)
                 if length <= 0:
 
-                    cursor.execute("INSERT INTO dbo.Beneficiary(PetitionerofPrimaryBeneficiary,PetitionerId, BeneficiaryXref, BeneficiaryType, SourceCreatedDate, IsActive, InactiveDate, LastName, FirstName, MiddleName, PrimaryBeneficiaryXref, PrimaryBeneficiaryLastName, PrimaryBeneficiaryFirstName, RelationType, Gender, BirthDate, BirthCountry, CitizenshipCountry, AlienNumber, MostRecentUSEntryDate, I94Number, ImmigrationStatus, ImmigrationStatusValidFromDate, ImmigrationStatusExpirationDate, MostRecentI797IssueApprovalDate, MostRecentI797Status, MostRecentI797ValidFromDate, I797ExpirationDate, InitialHlEntryDate, FinalNivDate, MaxOutDateNote, EadType, VisaPedDate, EadValidFromDate, EadExpirationDate, AdvanceParoleValidFromDate, AdvanceParoleExpirationDate, EADAPType, EadApValidFromDate, EadApExpirationDate, Ds2019ValidFromDate, Ds2019ExpirationDate, ReEntryPermitExpirationDate, GreenCardValidFromDate, GreenCardExpirationDate, MostRecentPassportLastName, MostRecentPassportFirstName, MostRecentPassportMiddleName, MostRecentPassportNumber, MostRecentPassportIssuingCountry, MostRecentPassportValidFromDate, MostRecentPassportExpirationDate, VisaType, VisaValidFromDate, VisaExpirationDate, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,CurrentImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note,PetitionerXref) VALUES ('{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}','{}')".format(petitioner_company_of_primary_beneficiary,petitioner_id, beneficiary_xref, beneficiary_type, beneficiary_record_creation_date, beneficiary_record_status, beneficiary_record_inactivation_date, beneficiary_last_name, beneficiary_first_name, beneficiary_middle_name, primary_beneficiary_id, primary_beneficiary_last_name, primary_beneficiary_first_name, relation, gender, date_of_birth, country_of_birth, country_of_citizenship,  alien_number, date_of_last_entry_into_the_us, i94_number, immigration_status, immigration_status_valid_from, immigration_status_expiration_status, i797_approved_date, i797_status, i797_valid_from, i797_expiration_date,  final_niv_status_valid_from, final_niv_maxout_date, maxout_note, ead_type, ped, ead_valid_from, ead_expiration_date, ap_valid_from, ap_expiration_date, ead_ap_type, ead_ap_valid_from, ead_ap_expiration_date, ds_2019_valid_from, ds_2019_expiration_date, reentry_permit_expiration_date, green_card_valid_from, green_card_expiration_date, passport_last_name, passport_first_name, passport_middle_name, passport_number, passport_issuing_country, passport_valid_from, passport_expiration_date, visa_type, visa_valid_from, visa_expiration_date, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,ImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note,petitioner_xref))
+                    cursor.execute("INSERT INTO dbo.Beneficiary(PetitionerId, BeneficiaryXref, BeneficiaryType, SourceCreatedDate, IsActive, InactiveDate, LastName, FirstName, MiddleName, PrimaryBeneficiaryXref, PrimaryBeneficiaryLastName, PrimaryBeneficiaryFirstName, RelationType, Gender, BirthDate, BirthCountry, CitizenshipCountry, AlienNumber, MostRecentUSEntryDate, I94Number, ImmigrationStatus, ImmigrationStatusValidFromDate, ImmigrationStatusExpirationDate, MostRecentI797IssueApprovalDate, MostRecentI797Status, MostRecentI797ValidFromDate, I797ExpirationDate, InitialHlEntryDate, FinalNivDate, MaxOutDateNote, EadType, VisaPedDate, EadValidFromDate, EadExpirationDate, AdvanceParoleValidFromDate, AdvanceParoleExpirationDate, EADAPType, EadApValidFromDate, EadApExpirationDate, Ds2019ValidFromDate, Ds2019ExpirationDate, ReEntryPermitExpirationDate, GreenCardValidFromDate, GreenCardExpirationDate, MostRecentPassportLastName, MostRecentPassportFirstName, MostRecentPassportMiddleName, MostRecentPassportNumber, MostRecentPassportIssuingCountry, MostRecentPassportValidFromDate, MostRecentPassportExpirationDate, VisaType, VisaValidFromDate, VisaExpirationDate, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,CurrentImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note) VALUES ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}','{}')".format(petitioner_id, beneficiary_xref, beneficiary_type, beneficiary_record_creation_date, beneficiary_record_status, beneficiary_record_inactivation_date, beneficiary_last_name, beneficiary_first_name, beneficiary_middle_name, primary_beneficiary_id, primary_beneficiary_last_name, primary_beneficiary_first_name, relation, gender, date_of_birth, country_of_birth, country_of_citizenship,  alien_number, date_of_last_entry_into_the_us, i94_number, immigration_status, immigration_status_valid_from, immigration_status_expiration_status, i797_approved_date, i797_status, i797_valid_from, i797_expiration_date,  final_niv_status_valid_from, final_niv_maxout_date, maxout_note, ead_type, ped, ead_valid_from, ead_expiration_date, ap_valid_from, ap_expiration_date, ead_ap_type, ead_ap_valid_from, ead_ap_expiration_date, ds_2019_valid_from, ds_2019_expiration_date, reentry_permit_expiration_date, green_card_valid_from, green_card_expiration_date, passport_last_name, passport_first_name, passport_middle_name, passport_number, passport_issuing_country, passport_valid_from, passport_expiration_date, visa_type, visa_valid_from, visa_expiration_date, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,ImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note))
                     cursor.execute("SELECT @@IDENTITY AS ID;")
                     beneficiary_id = cursor.fetchone()[0]
                     cursor.commit()
@@ -797,7 +793,7 @@ def process_beneficiary_file(file_path, from_name):
 
                     beneficiary_id = results[0].BeneficiaryId
                     
-                    cursor.execute("UPDATE dbo.Beneficiary SET PetitionerXref='{}',PetitionerofPrimaryBeneficiary='{}', PetitionerId='{}', BeneficiaryXref='{}', BeneficiaryType='{}', SourceCreatedDate='{}', IsActive='{}', InactiveDate='{}', LastName='{}', FirstName='{}', MiddleName='{}', PrimaryBeneficiaryXref='{}', PrimaryBeneficiaryLastName='{}', PrimaryBeneficiaryFirstName='{}', RelationType='{}', Gender='{}', BirthDate='{}', BirthCountry='{}', CitizenshipCountry='{}', AlienNumber='{}', MostRecentUSEntryDate='{}', I94Number='{}', ImmigrationStatus='{}', ImmigrationStatusValidFromDate='{}', ImmigrationStatusExpirationDate='{}', MostRecentI797IssueApprovalDate='{}', MostRecentI797Status='{}', MostRecentI797ValidFromDate='{}', I797ExpirationDate='{}', InitialHlEntryDate='{}', FinalNivDate='{}', MaxOutDateNote='{}', EadType='{}', VisaPedDate='{}', EadValidFromDate='{}', EadExpirationDate='{}', AdvanceParoleValidFromDate='{}', AdvanceParoleExpirationDate='{}', EADAPType='{}', EadApValidFromDate='{}', EadApExpirationDate='{}', Ds2019ValidFromDate='{}', Ds2019ExpirationDate='{}', ReEntryPermitExpirationDate='{}', GreenCardValidFromDate='{}', GreenCardExpirationDate='{}', MostRecentPassportLastName='{}', MostRecentPassportFirstName='{}', MostRecentPassportMiddleName='{}', MostRecentPassportNumber='{}', MostRecentPassportIssuingCountry='{}', MostRecentPassportValidFromDate='{}', MostRecentPassportExpirationDate='{}', VisaType='{}', VisaValidFromDate='{}', VisaExpirationDate='{}', from_name='{}', is_primary_beneficiary='{}',Beneficiary_Xref2='{}',FullName='{}',Current_Immigration_Status='{}',CurrentImmigrationStatusExpirationDate2='{}',I129SEndDate='{}',GreenCardMethod='{}',WorkEmail='{}',current_employer='{}',Visa_GreenCardMethod='{}',PriorityDate1Note='{}' WHERE BeneficiaryId='{}' ".format(petitioner_xref,petitioner_company_of_primary_beneficiary,petitioner_id, beneficiary_xref, beneficiary_type, beneficiary_record_creation_date, beneficiary_record_status, beneficiary_record_inactivation_date, beneficiary_last_name, beneficiary_first_name, beneficiary_middle_name, primary_beneficiary_id, primary_beneficiary_last_name, primary_beneficiary_first_name, relation, gender, date_of_birth, country_of_birth, country_of_citizenship,  alien_number, date_of_last_entry_into_the_us, i94_number, immigration_status, immigration_status_valid_from, immigration_status_expiration_status, i797_approved_date, i797_status, i797_valid_from, i797_expiration_date,  final_niv_status_valid_from, final_niv_maxout_date, maxout_note, ead_type, ped, ead_valid_from, ead_expiration_date, ap_valid_from, ap_expiration_date, ead_ap_type, ead_ap_valid_from, ead_ap_expiration_date, ds_2019_valid_from, ds_2019_expiration_date, reentry_permit_expiration_date, green_card_valid_from, green_card_expiration_date, passport_last_name, passport_first_name, passport_middle_name, passport_number, passport_issuing_country, passport_valid_from, passport_expiration_date, visa_type, visa_valid_from, visa_expiration_date, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,ImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note,beneficiary_id))
+                    cursor.execute("UPDATE dbo.Beneficiary SET PetitionerId='{}', BeneficiaryXref='{}', BeneficiaryType='{}', SourceCreatedDate='{}', IsActive='{}', InactiveDate='{}', LastName='{}', FirstName='{}', MiddleName='{}', PrimaryBeneficiaryXref='{}', PrimaryBeneficiaryLastName='{}', PrimaryBeneficiaryFirstName='{}', RelationType='{}', Gender='{}', BirthDate='{}', BirthCountry='{}', CitizenshipCountry='{}', AlienNumber='{}', MostRecentUSEntryDate='{}', I94Number='{}', ImmigrationStatus='{}', ImmigrationStatusValidFromDate='{}', ImmigrationStatusExpirationDate='{}', MostRecentI797IssueApprovalDate='{}', MostRecentI797Status='{}', MostRecentI797ValidFromDate='{}', I797ExpirationDate='{}', InitialHlEntryDate='{}', FinalNivDate='{}', MaxOutDateNote='{}', EadType='{}', VisaPedDate='{}', EadValidFromDate='{}', EadExpirationDate='{}', AdvanceParoleValidFromDate='{}', AdvanceParoleExpirationDate='{}', EADAPType='{}', EadApValidFromDate='{}', EadApExpirationDate='{}', Ds2019ValidFromDate='{}', Ds2019ExpirationDate='{}', ReEntryPermitExpirationDate='{}', GreenCardValidFromDate='{}', GreenCardExpirationDate='{}', MostRecentPassportLastName='{}', MostRecentPassportFirstName='{}', MostRecentPassportMiddleName='{}', MostRecentPassportNumber='{}', MostRecentPassportIssuingCountry='{}', MostRecentPassportValidFromDate='{}', MostRecentPassportExpirationDate='{}', VisaType='{}', VisaValidFromDate='{}', VisaExpirationDate='{}', from_name='{}', is_primary_beneficiary='{}',Beneficiary_Xref2='{}',FullName='{}',Current_Immigration_Status='{}',CurrentImmigrationStatusExpirationDate2='{}',I129SEndDate='{}',GreenCardMethod='{}',WorkEmail='{}',current_employer='{}',Visa_GreenCardMethod='{}',PriorityDate1Note='{}' WHERE BeneficiaryId='{}' ".format(petitioner_id, beneficiary_xref, beneficiary_type, beneficiary_record_creation_date, beneficiary_record_status, beneficiary_record_inactivation_date, beneficiary_last_name, beneficiary_first_name, beneficiary_middle_name, primary_beneficiary_id, primary_beneficiary_last_name, primary_beneficiary_first_name, relation, gender, date_of_birth, country_of_birth, country_of_citizenship,  alien_number, date_of_last_entry_into_the_us, i94_number, immigration_status, immigration_status_valid_from, immigration_status_expiration_status, i797_approved_date, i797_status, i797_valid_from, i797_expiration_date,  final_niv_status_valid_from, final_niv_maxout_date, maxout_note, ead_type, ped, ead_valid_from, ead_expiration_date, ap_valid_from, ap_expiration_date, ead_ap_type, ead_ap_valid_from, ead_ap_expiration_date, ds_2019_valid_from, ds_2019_expiration_date, reentry_permit_expiration_date, green_card_valid_from, green_card_expiration_date, passport_last_name, passport_first_name, passport_middle_name, passport_number, passport_issuing_country, passport_valid_from, passport_expiration_date, visa_type, visa_valid_from, visa_expiration_date, from_name, is_primary_beneficiary,Beneficiary_Xref2,FullName,Current_Immigration_Status,ImmigrationStatusExpirationDate2,I129SEndDate,GreenCardMethod,WorkEmail,current_employer,Visa_GreenCardMethod,PriorityDate1Note,beneficiary_id))
                     cursor.commit()
             
     
@@ -821,6 +817,22 @@ def process_beneficiary_file(file_path, from_name):
                 else:
                     cursor.execute("UPDATE dbo.BeneficiaryEmployment SET BeneficiaryId='{}', EmployeeId='{}', HireDate='{}', JobTitle='{}', Address1='{}', City='{}', StateProvince='{}', ZipCode='{}', Country='{}',Department='{}',Department_Group='{}',Department_Number='{}',Business_Unit_Code='{}',Client_Billing_Code='{}',ManagerName='{}',ManagerEmail='{}',SecondLevelManager='{}',SecondLevelManagerEmail='{}',BusinessPartnerName='{}',BusinessPartnerEmail='{}',CostCenter='{}',CostCenterNumber='{}',ClientBillingCode='{}',BusinessUnitCode='{}',JobCode='{}',EmploymentStartDate='{}',EmploymentEndDate='{}',WorkAddressFull='{}',WorkLocationCity='{}',WorkLocationState='{}' WHERE BeneficiaryId='{}'".format(beneficiary_id, beneficiary_employee_id, employee_hire_date, current_job_title, work_address_street, work_address_city, work_address_state, work_address_zip, work_address_country,Department,Department_Group,Department_Number,Business_Unit_Code,Client_Billing_Code,ManagerName,ManagerEmail,SecondLevelManager,SecondLevelManagerEmail,BusinessPartnerName,BusinessPartnerEmail,CostCenter,CostCenterNumber,ClientBillingCode,BusinessUnitCode,JobCode,EmploymentStartDate,EmploymentEndDate,WorkAddressFull,WorkLocationCity,WorkLocationState,beneficiary_id))
                     cursor.commit()
+
+    tables = ['dbo.Beneficiary','dbo.BeneficiaryPriorityDate','dbo.BeneficiaryPriorityDate','dbo.BeneficiaryEmployment']
+    for  table in tables:
+        table_fields = cursor.execute('''
+        SELECT name FROM sys.columns WHERE object_id = OBJECT_ID('{}')
+        '''.format(table)).fetchall()
+        for i in range(len(table_fields)):
+            try:
+                if table_fields[i].name != 'BeneficiaryId':
+                    cursor.execute('''update dbo.Beneficiary
+                            set {} = NULL  where {} IN('1900-01-01 00:00:00.000','2021-07-15 00:00:00.000')'''.format(table_fields[i].name,table_fields[i].name))
+                    cursor.commit()
+            except:
+                pass
+
+    
             
     # time.sleep(3)
     # cursor.execute('''update dbo.Beneficiary
@@ -1673,27 +1685,6 @@ def process_case_file(file_path, from_name):
             except:
                 # print('{} is not altered'.format(table_columns[i].name))
                 pass
-
-    # # update dbo.Case
-    # # set PrimaryBeneficiaryXref = BeneficiaryXref
-    # # where BeneficiaryType = 'Primary'
-
-    cursor.execute('''
-    update dbo.Beneficiary
-    set PrimaryBeneficiaryXref = BeneficiaryXref
-    where BeneficiaryType = 'Primary'
-    
-    update Beneficiary 
-    set PetitionerofPrimaryBeneficiary = p.PetitionerName
-    FROM Beneficiary b
-    left join Petitioner p on b.PetitionerXref = p.PetitionerXref
-    where b.BeneficiaryType = 'Primary'
-   
-    ''')
- 
-    cursor.commit()
-
-    
 
 def ActiveEmployeeReport(result_filepath):
     ###################################### Tab 1 Header #############################################

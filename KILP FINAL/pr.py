@@ -14,5 +14,7 @@ cursor = conn.cursor()
 
 
 df = pd.read_sql('select * from dbo.Beneficiary', conn)
+df2 = pd.read_sql('select * from dbo.Case', conn)
 
-df.to_excel('exxfw.xlsx',index = False)
+df.to_excel('exxfw.xlsx',sheet_name = 'beneficiary ',index = False)
+df2.to_excel('exxfw.xlsx',sheet_name = 'case ',index = False)
